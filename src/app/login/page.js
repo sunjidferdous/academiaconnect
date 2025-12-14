@@ -25,7 +25,7 @@ export default function Login() {
     }
 
     try {
-      // ✅ Call PHP login API
+      // Call PHP login API
       const res = await fetch('http://localhost/myapi/signin.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -40,15 +40,11 @@ export default function Login() {
         return
       }
 
-      // ✅ Save user info locally
+      // Save user info locally
       localStorage.setItem('user', JSON.stringify(data.user))
-      router.push('/student/dashboard')
 
-
-      // ✅ Redirect based on role
-      if (data.user.role === 'admin') router.push('/admin/dashboard')
-      else if (data.user.role === 'teacher') router.push('/teacher/dashboard')
-      else router.push('/student/dashboard')
+      // Always redirect to common dashboard
+      router.push('/dashboard')
 
     } catch (err) {
       setError('Network error. Check XAMPP & API URL.')
@@ -123,14 +119,7 @@ export default function Login() {
                   />
                 </div>
                 <div style={{ textAlign: 'right', marginTop: '5px' }}>
-                  <Link 
-                    href="#" 
-                    style={{ 
-                      color: 'var(--primary-blue)', 
-                      textDecoration: 'none', 
-                      fontSize: '0.9rem' 
-                    }}
-                  >
+                  <Link href="#" style={{ color: 'var(--primary-blue)', textDecoration: 'none', fontSize: '0.9rem' }}>
                     Forgot password?
                   </Link>
                 </div>
