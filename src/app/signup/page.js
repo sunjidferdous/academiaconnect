@@ -18,68 +18,57 @@ export default function SignUp() {
   const [error, setError] = useState('')
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-    setError('')
-    
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match!')
-      setIsLoading(false)
-      return
-    }
-    
-    // Validate terms acceptance
-    if (!formData.terms) {
-      setError('Please accept the terms and conditions')
-      setIsLoading(false)
-      return
-    }
-    
-    // DATABASE: Call signup API
-    // try {
-    //   const response = await fetch('/api/auth/signup', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify({
-    //       fullname: formData.fullname,
-    //       email: formData.email,
-    //       department: formData.department,
-    //       password: formData.password
-    //     })
-    //   })
-    //   
-    //   const data = await response.json()
-    //   
-    //   if (response.ok) {
-    //     // Store user data in localStorage
-    //     localStorage.setItem('user', JSON.stringify(data.user))
-    //     localStorage.setItem('authToken', data.token)
-    //     
-    //     alert('Account created successfully!')
-    //     router.push('/dashboard')
-    //   } else {
-    //     setError(data.message || 'Signup failed')
-    //   }
-    // } catch (err) {
-    //   setError('Network error. Please try again.')
-    // }
+  e.preventDefault()
+  setIsLoading(true)
+  setError('')
 
-    // For now, store mock user data
-    const mockUser = {
-      id: Date.now(),
-      name: formData.fullname,
-      email: formData.email,
-      department: formData.department,
-      avatar: formData.fullname.split(' ').map(n => n[0]).join('').toUpperCase()
-    }
-    
-    localStorage.setItem('user', JSON.stringify(mockUser))
-    
+  // Password match check
+  if (formData.password !== formData.confirmPassword) {
+    setError('Passwords do not match!')
     setIsLoading(false)
-    alert('Account created successfully!')
-    router.push('/dashboard')
+    return
   }
+
+  // Terms check
+  if (!formData.terms) {
+    setError('Please accept the terms and conditions')
+    setIsLoading(false)
+    return
+  }
+
+  const payload = {
+    name: formData.fullname,
+    email: formData.email,
+    password: formData.password,
+    role: 'student'
+  }
+
+  try {
+    const res = await fetch('http://localhost/myapi/signup.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    })
+
+    const data = await res.json()
+
+    if (!data.success) {
+      setError(data.message || 'Signup failed')
+      setIsLoading(false)
+      return
+    }
+
+    // ✅ SUCCESS (NO CSS BREAK)
+    alert('Account created successfully! Please login.')
+    router.push('/login')
+
+  } catch (err) {
+    setError('Network error. Please try again.')
+  }
+
+  setIsLoading(false)
+}
+
 
   const handleChange = (e) => {
     const { id, value, type, checked } = e.target

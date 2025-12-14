@@ -17,51 +17,44 @@ export default function Login() {
     e.preventDefault()
     setIsLoading(true)
     setError('')
-    
+
     if (!credentials.email || !credentials.password) {
       setError('Please fill in all fields')
       setIsLoading(false)
       return
     }
-    
-    // DATABASE: Call login API
-    // try {
-    //   const response = await fetch('/api/auth/login', {
-    //     method: 'POST',
-    //     headers: { 'Content-Type': 'application/json' },
-    //     body: JSON.stringify(credentials)
-    //   })
-    //   
-    //   const data = await response.json()
-    //   
-    //   if (response.ok) {
-    //     // Store user data and token
-    //     localStorage.setItem('user', JSON.stringify(data.user))
-    //     localStorage.setItem('authToken', data.token)
-    //     
-    //     router.push('/dashboard')
-    //   } else {
-    //     setError(data.message || 'Invalid credentials')
-    //   }
-    // } catch (err) {
-    //   setError('Network error. Please try again.')
-    // }
 
-    // For now, create mock user and store
-    setTimeout(() => {
-      const mockUser = {
-        id: 1,
-        name: 'John Smith',
-        email: credentials.email,
-        department: 'Computer Science',
-        avatar: 'JS'
+    try {
+      // ✅ Call PHP login API
+      const res = await fetch('http://localhost/myapi/signin.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials)
+      })
+
+      const data = await res.json()
+
+      if (!data.success) {
+        setError(data.message || 'Invalid credentials')
+        setIsLoading(false)
+        return
       }
-      
-      localStorage.setItem('user', JSON.stringify(mockUser))
-      
-      setIsLoading(false)
-      router.push('/dashboard')
-    }, 1000)
+
+      // ✅ Save user info locally
+      localStorage.setItem('user', JSON.stringify(data.user))
+      router.push('/student/dashboard')
+
+
+      // ✅ Redirect based on role
+      if (data.user.role === 'admin') router.push('/admin/dashboard')
+      else if (data.user.role === 'teacher') router.push('/teacher/dashboard')
+      else router.push('/student/dashboard')
+
+    } catch (err) {
+      setError('Network error. Check XAMPP & API URL.')
+    }
+
+    setIsLoading(false)
   }
 
   const handleChange = (e) => {
