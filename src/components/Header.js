@@ -5,14 +5,10 @@ import { usePathname, useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 
 export default function Header() {
+  // hooks always at the top
   const pathname = usePathname()
   const router = useRouter()
   const [user, setUser] = useState(null)
-
-  // Don't show header on auth pages
-  if (pathname === '/login' || pathname === '/signup') {
-    return null
-  }
 
   useEffect(() => {
     const userData = localStorage.getItem('user')
@@ -26,6 +22,9 @@ export default function Header() {
       })
     }
   }, [router])
+
+  // conditional rendering
+  if (pathname === '/login' || pathname === '/signup') return null
 
   const handleLogout = () => {
     localStorage.removeItem('user')

@@ -5,12 +5,10 @@ import { usePathname } from 'next/navigation'
 
 export default function Footer() {
   const pathname = usePathname()
-  
-  // Don't show footer on auth pages or messaging
-  if (pathname === '/login' || pathname === '/signup' || pathname === '/messaging') {
-    return null
-  }
-  
+
+  const hideFooterPaths = ['/login', '/signup', '/messaging']
+  if (hideFooterPaths.includes(pathname)) return null
+
   return (
     <footer className="footer">
       <div className="container footer-content">

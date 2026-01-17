@@ -1,15 +1,15 @@
-import './globals.css'
-import '@fortawesome/fontawesome-free/css/all.min.css'
-
-export const metadata = {
-  title: 'AcademiaConnect - University Hub',
-  description: 'Your university hub for activities, clubs, events, and connections',
-}
+import '../app/globals.css'
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <Header />
+        <main>{children}</main>
+        <Footer />
+      </body>
     </html>
   )
 }

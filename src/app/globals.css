@@ -1,3 +1,12 @@
+/* globals.css */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
+
+/* your other global styles */
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
+
 * {
     margin: 0;
     padding: 0;

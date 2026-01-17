@@ -10,11 +10,14 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^7.1.0",
+    "mysql2": "^3.16.1",
     "next": "16.0.8",
     "react": "19.2.1",
     "react-dom": "19.2.1"
   },
   "devDependencies": {
+    "@types/node": "25.0.9",
+    "@types/react": "19.2.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.8"
   }
